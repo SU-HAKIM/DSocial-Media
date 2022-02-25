@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import getContract from "./getWeb3";
 import Web3 from 'web3';
 import "./App.css";
-
 import Decentragram from "./contracts/Decentragram.json";
 import Navbar from "./components/Navbar";
 import Form from "./components/Form";
+
+import ipfs from "./ipfs";
 
 const App = () => {
 
@@ -39,9 +40,17 @@ const App = () => {
     }
   }
 
+
   const createImage = async () => {
     try {
-      console.log(description, buffer);
+      ipfs.files.add(buffer, (error, result) => {
+        if (error) {
+          console.log(error);
+          return
+        }
+        console.log(result);
+      })
+
     } catch (error) {
       console.log(error)
     }
@@ -69,7 +78,6 @@ const App = () => {
       console.error("Please install Meta Mask")
     }
   }
-  console.log(contractsAddress);
   return (
     <>
       <Navbar address={accounts} />
