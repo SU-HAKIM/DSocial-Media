@@ -13,8 +13,10 @@ const App = () => {
   const [accounts, setAccounts] = useState(null);
   const [contract, setContract] = useState(null);
   const [contractsAddress, setContractAddress] = useState('')
+  const [description, setDescription] = useState('')
   const [images, setImages] = useState([]);
   const [imagesCount, setImagesCount] = useState(null);
+  const [buffer, setBuffer] = useState(null);
 
   useEffect(() => {
     let connect = async () => {
@@ -23,6 +25,27 @@ const App = () => {
     }
     connect();
   }, [])
+
+  const handleChange = (e) => {
+    setDescription(e.target.value);
+  }
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new window.FileReader();
+    reader.readAsArrayBuffer(file);
+
+    reader.onloadend = () => {
+      setBuffer(Buffer(reader.result));
+    }
+  }
+
+  const createImage = async () => {
+    try {
+      console.log(description, buffer);
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
 
   const connectToMetaMask = async () => {
@@ -50,7 +73,12 @@ const App = () => {
   return (
     <>
       <Navbar address={accounts} />
-      <Form />
+      <Form
+        description={description}
+        handleChange={handleChange}
+        createImage={createImage}
+        handleFileChange={handleFileChange}
+      />
     </>
   );
 }
